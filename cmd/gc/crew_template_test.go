@@ -237,20 +237,20 @@ When ending a session, complete ALL steps below.
 func TestRenderCrewTemplateQualityGateWithRealTemplate(t *testing.T) {
 	f := fsys.NewFake()
 
-	f.Files["/city/prompts/crew.template.md"] = mustReadFile(
+	f.Files["/city/prompts/crew.template.md"] = mustReadFile(t,
 		"examples/gastown/packs/gastown/assets/prompts/crew.template.md",
 	)
 
-	f.Files["/city/prompts/shared/approval-fallacy.template.md"] = mustReadFile(
+	f.Files["/city/prompts/shared/approval-fallacy.template.md"] = mustReadFile(t,
 		"examples/gastown/packs/gastown/template-fragments/approval-fallacy.template.md",
 	)
-	f.Files["/city/prompts/shared/propulsion.template.md"] = mustReadFile(
+	f.Files["/city/prompts/shared/propulsion.template.md"] = mustReadFile(t,
 		"examples/gastown/packs/gastown/template-fragments/propulsion.template.md",
 	)
-	f.Files["/city/prompts/shared/capability-ledger.template.md"] = mustReadFile(
+	f.Files["/city/prompts/shared/capability-ledger.template.md"] = mustReadFile(t,
 		"examples/gastown/packs/gastown/template-fragments/capability-ledger.template.md",
 	)
-	f.Files["/city/prompts/shared/architecture.template.md"] = mustReadFile(
+	f.Files["/city/prompts/shared/architecture.template.md"] = mustReadFile(t,
 		"examples/gastown/packs/gastown/template-fragments/architecture.template.md",
 	)
 
@@ -281,12 +281,4 @@ func TestRenderCrewTemplateQualityGateWithRealTemplate(t *testing.T) {
 	if strings.Contains(got, "golangci-lint run") {
 		t.Errorf("rendered output contains hardcoded 'golangci-lint run' - quality gate must use {{ .InstructionsFile }}")
 	}
-}
-
-func mustReadFile(path string) []byte {
-	b, err := os.ReadFile(path)
-	if err != nil {
-		t.Fatalf("mustReadFile(%q): %v", path, err)
-	}
-	return b
 }
