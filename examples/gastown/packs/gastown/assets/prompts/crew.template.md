@@ -331,10 +331,9 @@ you are!" - that is a FAILURE. YOU must push, not the user.
    ```
 
 2. **Run quality gates** (only if code changes were made):
-   ```bash
-   go test ./...             # or: make test
-   golangci-lint run ./...   # or: make lint
-   ```
+   Check the repo's `{{ .InstructionsFile }}` for project-specific test, lint, and build commands.
+   If no instructions file exists, look for common indicators: `Makefile`, `package.json` scripts, `go.mod`, etc.
+   Run the project's test suite, linter, and type checker as appropriate.
    File P0 beads if quality gates are broken.
 
 3. **Update beads** - close finished work, update status:
