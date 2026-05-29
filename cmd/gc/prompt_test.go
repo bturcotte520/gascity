@@ -856,19 +856,18 @@ func TestRenderPromptInstructionsFileExposed(t *testing.T) {
 	f := fsys.NewFake()
 	f.Files["/city/prompts/test.template.md"] = []byte("instructions={{ .InstructionsFile }}")
 	cases := []struct {
-		key    string
-		want   string
+		instructionsFile string
+		want             string
 	}{
-		{"claude", "instructions=CLAUDE.md"},
-		{"codex", "instructions=AGENTS.md"},
-		{"kiro", "instructions=AGENTS.md"},
+		{"CLAUDE.md", "instructions=CLAUDE.md"},
+		{"AGENTS.md", "instructions=AGENTS.md"},
 		{"", "instructions="},
 	}
 	for _, tc := range cases {
-		ctx := PromptContext{ProviderKey: tc.key}
+		ctx := PromptContext{InstructionsFile: tc.instructionsFile}
 		got := renderPrompt(f, "/city", "", "prompts/test.template.md", ctx, "", io.Discard, nil, nil, nil)
 		if got != tc.want {
-			t.Errorf("ProviderKey=%q: got %q, want %q", tc.key, got, tc.want)
+			t.Errorf("InstructionsFile=%q: got %q, want %q", tc.instructionsFile, got, tc.want)
 		}
 	}
 }
