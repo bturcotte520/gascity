@@ -47,7 +47,10 @@ type PromptContext struct {
 	// builtins, then the builtin family of a custom provider; falls back to
 	// ProviderKey when nothing else matches.
 	ProviderDisplayName string
-	Env                 map[string]string // from Agent.Env — custom vars
+	// InstructionsFile is the filename the resolved provider reads for project
+	// instructions (e.g., "CLAUDE.md" for Claude, "AGENTS.md" for others).
+	InstructionsFile string
+	Env              map[string]string // from Agent.Env — custom vars
 }
 
 // PromptRenderResult holds the rendered text plus the version and rendered
@@ -301,6 +304,7 @@ func buildTemplateData(ctx PromptContext) map[string]string {
 	m["SlingQuery"] = ctx.SlingQuery
 	m["ProviderKey"] = ctx.ProviderKey
 	m["ProviderDisplayName"] = ctx.ProviderDisplayName
+	m["InstructionsFile"] = ctx.InstructionsFile
 	return m
 }
 

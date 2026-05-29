@@ -852,6 +852,26 @@ func TestRenderPromptProviderContextVarsExposed(t *testing.T) {
 	}
 }
 
+func TestRenderPromptInstructionsFileExposed(t *testing.T) {
+	f := fsys.NewFake()
+	f.Files["/city/prompts/test.template.md"] = []byte("instructions={{ .InstructionsFile }}")
+	cases := []struct {
+		instructionsFile string
+		want             string
+	}{
+		{"CLAUDE.md", "instructions=CLAUDE.md"},
+		{"AGENTS.md", "instructions=AGENTS.md"},
+		{"", "instructions="},
+	}
+	for _, tc := range cases {
+		ctx := PromptContext{InstructionsFile: tc.instructionsFile}
+		got := renderPrompt(f, "/city", "", "prompts/test.template.md", ctx, "", io.Discard, nil, nil, nil)
+		if got != tc.want {
+			t.Errorf("InstructionsFile=%q: got %q, want %q", tc.instructionsFile, got, tc.want)
+		}
+	}
+}
+
 func TestRenderPromptTemplateFirstPicksFirstRegistered(t *testing.T) {
 	f := fsys.NewFake()
 	f.Files["/city/prompts/shared/frags.template.md"] = []byte(
