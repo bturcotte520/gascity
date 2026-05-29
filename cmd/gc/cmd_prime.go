@@ -273,9 +273,13 @@ func doPrimeWithHookFormat(args []string, stdout, stderr io.Writer, hookMode boo
 			}))
 		}
 		var ctx PromptContext
+		resolvedPrime, _ := config.ResolveProvider(&a, &cfg.Workspace, cfg.Providers, exec.LookPath)
 		if a.PromptTemplate != "" || hookMode || sessionTemplateContext {
 			ctx = buildPrimeContext(cityPath, cityName, &a, cfg.Rigs, stderr)
 			ctx.ProviderKey, ctx.ProviderDisplayName = providerInfoForAgent(&a, &cfg.Workspace, cfg.Providers)
+			if resolvedPrime != nil {
+				ctx.InstructionsFile = resolvedPrime.InstructionsFile
+			}
 		}
 		if a.PromptTemplate != "" {
 			fragments := effectivePromptFragments(
